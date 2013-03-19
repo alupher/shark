@@ -28,12 +28,11 @@ import org.apache.hadoop.hive.metastore.api.{FieldSchema, MetaException}
 import org.apache.hadoop.hive.metastore.Warehouse
 import org.apache.hadoop.hive.ql.exec.{DDLTask, FetchTask, MoveTask, TaskFactory}
 import org.apache.hadoop.hive.ql.metadata.HiveException
-import org.apache.hadoop.hive.ql.optimizer.Optimizer
 import org.apache.hadoop.hive.ql.parse._
 import org.apache.hadoop.hive.ql.plan._
 import org.apache.hadoop.hive.ql.session.SessionState
 
-import shark.{LogHelper, SharkConfVars, Utils}
+import shark.{LogHelper, SharkOptimizer, SharkConfVars, Utils}
 import shark.execution.{HiveOperator, Operator, OperatorFactory, ReduceSinkOperator, SparkWork,
   TerminalOperator}
 import shark.memstore.ColumnarSerDe
@@ -69,7 +68,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
     val pctx = getParseContext()
     pctx.setQB(qb)
     pctx.setParseTree(ast)
-    init(pctx)
+    initParseCtx(pctx)
     var child: ASTNode = ast
 
     logInfo("Starting Shark Semantic Analysis")
@@ -149,11 +148,11 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
 
     // Run Hive optimization.
     var pCtx: ParseContext = getParseContext
-    val optm = new Optimizer()
+    val optm = new SharkOptimizer()
     optm.setPctx(pCtx)
     optm.initialize(conf)
     pCtx = optm.optimize()
-    init(pCtx)
+    initParseCtx(pCtx)
 
     // Replace Hive physical plan with Shark plan. This needs to happen after
     // Hive optimization.

@@ -60,6 +60,7 @@ abstract class CommonJoinOperator[JOINDESCTYPE <: JoinDesc, T <: HiveCommonJoinO
   var joinValuesStandardObjectInspectors: JavaHashMap[java.lang.Byte, JavaList[ObjectInspector]] = _
 
   @transient var noOuterJoin: Boolean = _
+  @transient var filterMap: Array[Array[Int]] = _
 
   override def initializeOnMaster() {
     conf = hiveOp.getConf()
@@ -75,6 +76,7 @@ abstract class CommonJoinOperator[JOINDESCTYPE <: JoinDesc, T <: HiveCommonJoinO
   override def initializeOnSlave() {
 
     noOuterJoin = conf.isNoOuterJoin
+    filterMap = conf.getFilterMap
 
     joinVals = new JavaHashMap[java.lang.Byte, JavaList[ExprNodeEvaluator]]
     JoinUtil.populateJoinKeyValue(

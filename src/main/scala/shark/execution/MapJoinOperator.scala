@@ -195,7 +195,7 @@ class MapJoinOperator extends CommonJoinOperator[MapJoinDesc, HiveMapJoinOperato
         joinValuesObjectInspectors.get(posByte),
         joinFilters.get(posByte),
         joinFilterObjectInspectors.get(posByte),
-        noOuterJoin)
+        if (filterMap == null) null else filterMap(posByte))
       // If we've seen the key before, just add it to the row container wrapped by
       // corresponding MapJoinObjectValue.
       val objValue = valueMap.get(key)
@@ -279,7 +279,7 @@ class MapJoinOperator extends CommonJoinOperator[MapJoinDesc, HiveMapJoinOperato
         joinValuesObjectInspectors.get(bigTableAliasByte),
         joinFilters.get(bigTableAliasByte),
         joinFilterObjectInspectors.get(bigTableAliasByte),
-        noOuterJoin)
+        if (filterMap == null) null else filterMap(bigTableAlias))
 
       if (nullCheck && key.hasAnyNulls(nullSafes)) {
         val bufsNull = Array.fill[Seq[Array[Object]]](numTables)(Seq())

@@ -150,7 +150,7 @@ object SharkCliDriver {
     var reader = new ConsoleReader()
     reader.setBellEnabled(false)
     // reader.setDebug(new PrintWriter(new FileWriter("writer.debug", true)))
-    reader.addCompletor(CliDriver.getCommandCompletor())
+    reader.addCompletor(CliDriver.getCommandCompletor()(1))
 
     var line: String = null
     val HISTORYFILE = ".hivehistory"
