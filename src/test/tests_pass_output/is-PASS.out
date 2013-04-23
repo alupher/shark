@@ -1,0 +1,187 @@
+WARNING: org.apache.hadoop.metrics.jvm.EventCounter is deprecated. Please use org.apache.hadoop.log.metrics.EventCounter in all the log4j.properties files.
+Hive history file=/root/hive-0.9.0/build/ql/tmp/hive_job_log_root_201304230029_53825082.txt
+3.164: [GC 629178K->3513K(12058624K), 0.0142290 secs]
+3.178: [Full GC 3513K->3432K(12058624K), 0.0965070 secs]
+3.276: [GC 144990K->3503K(12058624K), 0.0004260 secs]
+3.276: [Full GC 3503K->3471K(12058624K), 0.0596550 secs]
+Hive history file=/root/hive-0.9.0/build/ql/tmp/hive_job_log_root_201304230029_2080978931.txt
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-08',hr='11')
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcpart
+Copying data from file:/root/hive-0.9.0/data/files/kv1.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Loading data to table default.srcpart partition (ds=2008-04-08, hr=11)
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-08',hr='11')
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcpart
+POSTHOOK: Output: default@srcpart@ds=2008-04-08/hr=11
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-08',hr='12')
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcpart
+Copying data from file:/root/hive-0.9.0/data/files/kv1.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Loading data to table default.srcpart partition (ds=2008-04-08, hr=12)
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-08',hr='12')
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcpart
+POSTHOOK: Output: default@srcpart@ds=2008-04-08/hr=12
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-09',hr='11')
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcpart
+Copying data from file:/root/hive-0.9.0/data/files/kv1.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Loading data to table default.srcpart partition (ds=2008-04-09, hr=11)
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-09',hr='11')
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcpart
+POSTHOOK: Output: default@srcpart@ds=2008-04-09/hr=11
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-09',hr='12')
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcpart
+Copying data from file:/root/hive-0.9.0/data/files/kv1.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Loading data to table default.srcpart partition (ds=2008-04-09, hr=12)
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' OVERWRITE INTO TABLE srcpart PARTITION (ds='2008-04-09',hr='12')
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcpart
+POSTHOOK: Output: default@srcpart@ds=2008-04-09/hr=12
+OK
+PREHOOK: query: CREATE TABLE srcbucket(key int, value string) CLUSTERED BY (key) INTO 2 BUCKETS STORED AS TEXTFILE
+PREHOOK: type: LOAD
+POSTHOOK: query: CREATE TABLE srcbucket(key int, value string) CLUSTERED BY (key) INTO 2 BUCKETS STORED AS TEXTFILE
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket0.txt' INTO TABLE srcbucket
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket0.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket0.txt
+Loading data to table default.srcbucket
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket0.txt' INTO TABLE srcbucket
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket1.txt' INTO TABLE srcbucket
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket1.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket1.txt
+Loading data to table default.srcbucket
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket1.txt' INTO TABLE srcbucket
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket
+OK
+PREHOOK: query: CREATE TABLE srcbucket2(key int, value string) CLUSTERED BY (key) INTO 4 BUCKETS STORED AS TEXTFILE
+PREHOOK: type: LOAD
+POSTHOOK: query: CREATE TABLE srcbucket2(key int, value string) CLUSTERED BY (key) INTO 4 BUCKETS STORED AS TEXTFILE
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket2
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket20.txt' INTO TABLE srcbucket2
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket2
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Loading data to table default.srcbucket2
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket20.txt' INTO TABLE srcbucket2
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket2
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket21.txt' INTO TABLE srcbucket2
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket2
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket21.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket21.txt
+Loading data to table default.srcbucket2
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket21.txt' INTO TABLE srcbucket2
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket2
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket22.txt' INTO TABLE srcbucket2
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket2
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket22.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket22.txt
+Loading data to table default.srcbucket2
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket22.txt' INTO TABLE srcbucket2
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket2
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket23.txt' INTO TABLE srcbucket2
+PREHOOK: type: LOAD
+PREHOOK: Output: default@srcbucket2
+Copying data from file:/root/hive-0.9.0/data/files/srcbucket23.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket23.txt
+Loading data to table default.srcbucket2
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/srcbucket23.txt' INTO TABLE srcbucket2
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@srcbucket2
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' INTO TABLE src
+PREHOOK: type: LOAD
+PREHOOK: Output: default@src
+Copying data from file:/root/hive-0.9.0/data/files/kv1.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Loading data to table default.src
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.txt' INTO TABLE src
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@src
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv3.txt' INTO TABLE src1
+PREHOOK: type: LOAD
+PREHOOK: Output: default@src1
+Copying data from file:/root/hive-0.9.0/data/files/kv3.txt
+Copying file: file:/root/hive-0.9.0/data/files/kv3.txt
+Loading data to table default.src1
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv3.txt' INTO TABLE src1
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@src1
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.seq' INTO TABLE src_sequencefile
+PREHOOK: type: LOAD
+PREHOOK: Output: default@src_sequencefile
+Copying data from file:/root/hive-0.9.0/data/files/kv1.seq
+Copying file: file:/root/hive-0.9.0/data/files/kv1.seq
+Loading data to table default.src_sequencefile
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/kv1.seq' INTO TABLE src_sequencefile
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@src_sequencefile
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/complex.seq' INTO TABLE src_thrift
+PREHOOK: type: LOAD
+PREHOOK: Output: default@src_thrift
+Copying data from file:/root/hive-0.9.0/data/files/complex.seq
+Copying file: file:/root/hive-0.9.0/data/files/complex.seq
+Loading data to table default.src_thrift
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/complex.seq' INTO TABLE src_thrift
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@src_thrift
+OK
+PREHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/json.txt' INTO TABLE src_json
+PREHOOK: type: LOAD
+PREHOOK: Output: default@src_json
+Copying data from file:/root/hive-0.9.0/data/files/json.txt
+Copying file: file:/root/hive-0.9.0/data/files/json.txt
+Loading data to table default.src_json
+POSTHOOK: query: LOAD DATA LOCAL INPATH '/root/hive-0.9.0/data/files/json.txt' INTO TABLE src_json
+POSTHOOK: type: LOAD
+POSTHOOK: Output: default@src_json
+OK
+Hive history file=/root/hive-0.9.0/build/ql/tmp/hive_job_log_root_201304230029_1180788234.txt
+---------------------------------------------------
+---------------------------------------------------
+---------------------------------------------------
+---------------------------------------------------
+shark.TestSharkCliDriver
+TestSharkCliDriver: testCliDriver_union30
+TestSharkCliDriver: testCliDriver_union_lateralview
+TestSharkCliDriver: testCliDriver_union_view
+TestSharkCliDriver total test to run: 3
+---------------------------------------------------
+---------------------------------------------------
+---------------------------------------------------
+---------------------------------------------------

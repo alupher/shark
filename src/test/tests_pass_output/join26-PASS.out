@@ -1,0 +1,6 @@
+.Begin query: join26.q
+19.273: [GC 3149199K->78045K(12058624K), 0.1345830 secs]
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/dest_j1
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/join26.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/join26.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/join26.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/join26.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: join26.q elapsedTime=4s

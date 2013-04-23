@@ -1,0 +1,8 @@
+.Begin query: partition_special_char.q
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/sc_part/ts=2011-01-11+14%3A18%3A26
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/sc_part/ts=2011-01-11+16%3A18%3A26
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/sc_part/ts=2011-01-11+15%3A18%3A26
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/partition_special_char.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/partition_special_char.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/partition_special_char.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/partition_special_char.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+20.726: [GC 3149199K->73306K(12058624K), 0.1454740 secs]
+Done query: partition_special_char.q elapsedTime=10s

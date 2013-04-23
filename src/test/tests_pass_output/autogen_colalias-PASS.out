@@ -1,0 +1,4 @@
+.Begin query: autogen_colalias.q
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/autogen_colalias.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/autogen_colalias.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/autogen_colalias.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/autogen_colalias.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: autogen_colalias.q elapsedTime=3s

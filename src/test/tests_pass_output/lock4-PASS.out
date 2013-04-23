@@ -1,0 +1,12 @@
+.Begin query: lock4.q
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=11
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=12
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=11
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/lock4.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/lock4.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/lock4.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/lock4.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: lock4.q elapsedTime=6s
+
+Time: 518.204
+
+OK (25 tests)
+
