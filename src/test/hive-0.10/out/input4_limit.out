@@ -1,0 +1,23 @@
+.Begin query: input4_limit.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/input4_limit.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/input4_limit.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/input4_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/input4_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: input4_limit.q elapsedTime=1s
+
+Time: 66.964
+There were 2 failures:
+1) testCliDriver_input30(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_input30(TestCliDriver.java:19876)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2) testCliDriver_input39(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_input39(TestCliDriver.java:20335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 25,  Failures: 2,  Errors: 0
+

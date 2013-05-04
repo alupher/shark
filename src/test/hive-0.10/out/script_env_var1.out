@@ -1,0 +1,35 @@
+.Begin query: script_env_var1.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/script_env_var1.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/script_env_var1.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/script_env_var1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/script_env_var1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: script_env_var1.q elapsedTime=6s
+
+Time: 91.989
+There were 4 failures:
+1) testCliDriver_rand_partitionpruner1(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_rand_partitionpruner1(TestCliDriver.java:34411)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2) testCliDriver_rand_partitionpruner3(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_rand_partitionpruner3(TestCliDriver.java:34513)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+3) testCliDriver_rcfile_default_format(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_rcfile_default_format(TestCliDriver.java:34717)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+4) testCliDriver_repair(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_repair(TestCliDriver.java:35584)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 25,  Failures: 4,  Errors: 0
+

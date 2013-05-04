@@ -1,0 +1,6 @@
+.Begin query: load_dyn_part5.q
+85.980: [GC 3255957K->112479K(12058624K), 0.1463220 secs]
+110.136: [GC 3258207K->123223K(12058624K), 0.1354080 secs]
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/load_dyn_part5.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/load_dyn_part5.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/load_dyn_part5.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/load_dyn_part5.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: load_dyn_part5.q elapsedTime=38s

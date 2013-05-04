@@ -1,0 +1,35 @@
+.Begin query: union11.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/union11.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/union11.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/union11.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/union11.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: union11.q elapsedTime=2s
+
+Time: 61.984
+There were 4 failures:
+1) testCliDriver_udf_union(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udf_union(TestCliDriver.java:50680)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2) testCliDriver_udf_unix_timestamp(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udf_unix_timestamp(TestCliDriver.java:50731)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+3) testCliDriver_udtf_json_tuple(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udtf_json_tuple(TestCliDriver.java:51547)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+4) testCliDriver_udtf_parse_url_tuple(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udtf_parse_url_tuple(TestCliDriver.java:51598)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 25,  Failures: 4,  Errors: 0
+

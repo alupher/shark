@@ -1,0 +1,5 @@
+.Begin query: transform_ppr1.q
+22.019: [GC 3149182K->75532K(12058624K), 0.1413660 secs]
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/transform_ppr1.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/transform_ppr1.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/transform_ppr1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/transform_ppr1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: transform_ppr1.q elapsedTime=10s

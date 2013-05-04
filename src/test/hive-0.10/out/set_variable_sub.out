@@ -1,0 +1,4 @@
+F.Begin query: set_variable_sub.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/set_variable_sub.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/set_variable_sub.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/set_variable_sub.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/set_variable_sub.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: set_variable_sub.q elapsedTime=0s

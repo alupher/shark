@@ -1,0 +1,38 @@
+.Begin query: udaf_context_ngrams.q
+Copying file: file:/root/hive-0.10.0/data/files/text-en.txt
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/udaf_context_ngrams.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/udaf_context_ngrams.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/udaf_context_ngrams.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/udaf_context_ngrams.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+1,2c1,2
+< [119.0,91.0,80.0,66.0,62.0,53.0,48.0,44.0,40.0,38.0,29.0,28.0,27.0,25.0,25.0,23.0,20.0,19.0,19.0,17.0,17.0,16.0,16.0,16.0,16.0,15.0,15.0,15.0,13.0,13.0,13.0,13.0,13.0,12.0,12.0,12.0,12.0,12.0,11.0,11.0,11.0,11.0,10.0,10.0,10.0,10.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0]
+< [13.0,10.0,10.0,9.0,9.0,9.0,9.0,9.0,8.0,8.0,8.0,7.0,7.0,7.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0]
+---
+> [23.0,20.0,18.0,17.0,17.0,16.0,16.0,16.0,16.0,15.0,14.0,13.0,12.0,12.0,12.0,11.0,11.0,11.0,10.0,10.0,10.0,10.0,10.0,10.0,9.0,9.0,9.0,8.0,8.0,8.0,8.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0,4.0]
+> [267.0,171.0,164.0,119.0,108.0,106.0,106.0,82.0,79.0,67.0,67.0,46.0,45.0,42.0,42.0,40.0,39.0,37.0,37.0,36.0,34.0,32.0,32.0,30.0,30.0,29.0,28.0,28.0,28.0,28.0,26.0,25.0,24.0,23.0,23.0,22.0,22.0,21.0,20.0,19.0,18.0,18.0,18.0,17.0,17.0,17.0,16.0,16.0,16.0,16.0,15.0,15.0,14.0,14.0,14.0,13.0,13.0,13.0,13.0,13.0,13.0,13.0,12.0,12.0,12.0,12.0,12.0,12.0,12.0,11.0,11.0,11.0,11.0,11.0,11.0,11.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,8.0]
+14d13
+< [{"ngram":["thought"],"estfrequency":13.0},{"ngram":["was"],"estfrequency":9.0},{"ngram":["had"],"estfrequency":9.0},{"ngram":["could"],"estfrequency":6.0},{"ngram":["looked"],"estfrequency":4.0},{"ngram":["would"],"estfrequency":4.0},{"ngram":["lay"],"estfrequency":3.0},{"ngram":["felt"],"estfrequency":3.0},{"ngram":["lifted"],"estfrequency":3.0},{"ngram":["slid"],"estfrequency":3.0},{"ngram":["reported"],"estfrequency":2.0},{"ngram":["drew"],"estfrequency":2.0},{"ngram":["did"],"estfrequency":2.0},{"ngram":["wouldn't"],"estfrequency":2.0},{"ngram":["threw"],"estfrequency":2.0},{"ngram":["always"],"estfrequency":2.0},{"ngram":["found"],"estfrequency":2.0},{"ngram":["tried"],"estfrequency":2.0},{"ngram":["must"],"estfrequency":2.0},{"ngram":["didn't"],"estfrequency":2.0},{"ngram":["touched"],"estfrequency":2.0},{"ngram":["do"],"estfrequency":2.0},{"ngram":["began"],"estfrequency":2.0},{"ngram":["slowly"],"estfrequency":1.0},{"ngram":["discovered"],"estfrequency":1.0},{"ngram":["really"],"estfrequency":1.0},{"ngram":["have"],"estfrequency":1.0},{"ngram":["were"],"estfrequency":1.0},{"ngram":["caught"],"estfrequency":1.0},{"ngram":["retracted"],"estfrequency":1.0}]
+15a15,20
+Exception: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+junit.framework.AssertionFailedError: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+> [{"ngram":["was"],"estfrequency":17.0},{"ngram":["had"],"estfrequency":16.0},{"ngram":["thought"],"estfrequency":13.0},{"ngram":["could"],"estfrequency":9.0},{"ngram":["would"],"estfrequency":7.0},{"ngram":["lay"],"estfrequency":5.0},{"ngram":["looked"],"estfrequency":4.0},{"ngram":["s"],"estfrequency":4.0},{"ngram":["wanted"],"estfrequency":4.0},{"ngram":["did"],"estfrequency":4.0},{"ngram":["felt"],"estfrequency":4.0},{"ngram":["needed"],"estfrequency":3.0},{"ngram":["must"],"estfrequency":3.0},{"ngram":["told"],"estfrequency":3.0},{"ngram":["lifted"],"estfrequency":3.0},{"ngram":["tried"],"estfrequency":3.0},{"ngram":["finally"],"estfrequency":3.0},{"ngram":["slid"],"estfrequency":3.0},{"ngram":["reported"],"estfrequency":2.0},{"ngram":["drew"],"estfrequency":2.0},{"ngram":["is"],"estfrequency":2.0},{"ngram":["wouldn't"],"estfrequency":2.0},{"ngram":["always"],"estfrequency":2.0},{"ngram":["really"],"estfrequency":2.0},{"ngram":["let"],"estfrequency":2.0},{"ngram":["threw"],"estfrequency":2.0},{"ngram":["found"],"estfrequency":2.0},{"ngram":["also"],"estfrequency":2.0},{"ngram":["made"],"estfrequency":2.0},{"ngram":["didn't"],"estfrequency":2.0},{"ngram":["touched"],"estfrequency":2.0},{"ngram":["do"],"estfrequency":2.0},{"ngram":["began"],"estfrequency":2.0},{"ngram":["preferred"],"estfrequency":1.0},{"ngram":["maintained"],"estfrequency":1.0},{"ngram":["managed"],"estfrequency":1.0},{"ngram":["urged"],"estfrequency":1.0},{"ngram":["will"],"estfrequency":1.0},{"ngram":["failed"],"estfrequency":1.0},{"ngram":["have"],"estfrequency":1.0},{"ngram":["heard"],"estfrequency":1.0},{"ngram":["were"],"estfrequency":1.0},{"ngram":["caught"],"estfrequency":1.0},{"ngram":["hit"],"estfrequency":1.0},{"ngram":["turned"],"estfrequency":1.0},{"ngram":["slowly"],"estfrequency":1.0},{"ngram":["stood"],"estfrequency":1.0},{"ngram":["chose"],"estfrequency":1.0},{"ngram":["swung"],"estfrequency":1.0},{"ngram":["denied"],"estfrequency":1.0},{"ngram":["intended"],"estfrequency":1.0},{"ngram":["became"],"estfrequency":1.0},{"ngram":["sits"],"estfrequency":1.0},{"ngram":["discovered"],"estfrequency":1.0},{"ngram":["called"],"estfrequency":1.0},{"ngram":["never"],"estfrequency":1.0},{"ngram":["cut"],"estfrequency":1.0},{"ngram":["directed"],"estfrequency":1.0},{"ngram":["hoped"],"estfrequency":1.0},{"ngram":["remembered"],"estfrequency":1.0},{"ngram":["said"],"estfrequency":1.0},{"ngram":["allowed"],"estfrequency":1.0},{"ngram":["confined"],"estfrequency":1.0},{"ngram":["almost"],"estfrequency":1.0},{"ngram":["retracted"],"estfrequency":1.0}]
+> POSTHOOK: Input: default@kafka
+> POSTHOOK: Input: default@kafka
+> POSTHOOK: Input: default@kafka	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udaf_context_ngrams(TestCliDriver.java:42154)
+
+> POSTHOOK: Input: default@kafka
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at junit.textui.TestRunner.doRun(TestRunner.java:116)
+	at junit.textui.TestRunner.start(TestRunner.java:180)
+	at junit.textui.TestRunner.main(TestRunner.java:138)
+Failed query: udaf_context_ngrams.q

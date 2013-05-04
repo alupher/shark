@@ -1,0 +1,75 @@
+.Begin query: udf_sentences.q
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/sent_tmp
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/sent_tmp2
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/sent_tmp
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/sent_tmp2
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/udf_sentences.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/udf_sentences.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/udf_sentences.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/udf_sentences.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: udf_sentences.q elapsedTime=6s
+
+Time: 209.61
+There were 10 failures:
+1) testCliDriver_stats12(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_stats12(TestCliDriver.java:40225)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2) testCliDriver_stats13(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_stats13(TestCliDriver.java:40276)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+3) testCliDriver_stats2(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_stats2(TestCliDriver.java:40531)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+4) testCliDriver_stats5(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_stats5(TestCliDriver.java:40684)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+5) testCliDriver_stats6(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_stats6(TestCliDriver.java:40735)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+6) testCliDriver_udaf_context_ngrams(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udaf_context_ngrams(TestCliDriver.java:42163)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+7) testCliDriver_udaf_corr(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udaf_corr(TestCliDriver.java:42214)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+8) testCliDriver_udaf_covar_pop(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udaf_covar_pop(TestCliDriver.java:42265)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+9) testCliDriver_udaf_percentile_approx(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udaf_percentile_approx(TestCliDriver.java:42520)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+10) testCliDriver_udf_explode(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_udf_explode(TestCliDriver.java:45529)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 24,  Failures: 10,  Errors: 0
+

@@ -1,0 +1,20 @@
+.Begin query: lock4.q
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=11
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=11
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/tstsrcpart/ds=2008-04-08/hr=12
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/lock4.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/lock4.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/lock4.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/lock4.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: lock4.q elapsedTime=6s
+
+Time: 507.863
+There was 1 failure:
+1) testCliDriver_input46(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_input46(TestCliDriver.java:20845)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 25,  Failures: 1,  Errors: 0
+

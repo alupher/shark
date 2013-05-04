@@ -1,0 +1,11 @@
+.Begin query: alter5.q
+Copying file: file:/root/hive-0.10.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter5_src
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter5/parta
+18.572: [GC 3149183K->53914K(12058624K), 0.1237510 secs]
+Copying file: file:/root/hive-0.10.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter5_db.db/alter5_src
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter5_db.db/alter5/parta
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/alter5.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/alter5.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/alter5.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/alter5.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: alter5.q elapsedTime=9s

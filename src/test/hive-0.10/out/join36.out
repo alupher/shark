@@ -1,0 +1,7 @@
+.Begin query: join36.q
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/tmp1
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/tmp2
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/dest_j1
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/join36.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/join36.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/join36.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/join36.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: join36.q elapsedTime=3s

@@ -1,0 +1,9 @@
+.Begin query: alter_rename_partition.q
+Copying file: file:/root/hive-0.10.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter_rename_partition_src
+19.447: [GC 3149182K->54843K(12058624K), 0.1497990 secs]
+Copying file: file:/root/hive-0.10.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/alter_rename_partition_db.db/alter_rename_partition_src
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/alter_rename_partition.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/alter_rename_partition.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/alter_rename_partition.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/alter_rename_partition.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: alter_rename_partition.q elapsedTime=11s

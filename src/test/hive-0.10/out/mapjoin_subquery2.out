@@ -1,0 +1,8 @@
+.Begin query: mapjoin_subquery2.q
+Copying file: file:/root/hive-0.10.0/data/files/x.txt
+Copying file: file:/root/hive-0.10.0/data/files/y.txt
+Copying file: file:/root/hive-0.10.0/data/files/z.txt
+19.899: [GC 3149182K->84510K(12058624K), 0.1438840 secs]
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/mapjoin_subquery2.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/mapjoin_subquery2.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/mapjoin_subquery2.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/mapjoin_subquery2.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: mapjoin_subquery2.q elapsedTime=8s

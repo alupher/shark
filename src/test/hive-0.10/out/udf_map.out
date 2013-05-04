@@ -1,0 +1,5 @@
+.Begin query: udf_map.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/udf_map.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/udf_map.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/udf_map.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/udf_map.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+18.391: [GC 3149182K->53287K(12058624K), 0.1369460 secs]
+Done query: udf_map.q elapsedTime=1s

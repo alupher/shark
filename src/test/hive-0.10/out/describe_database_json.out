@@ -1,0 +1,17 @@
+.Begin query: describe_database_json.q
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/describe_database_json.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/describe_database_json.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/describe_database_json.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/describe_database_json.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: describe_database_json.q elapsedTime=1s
+
+Time: 116.995
+There was 1 failure:
+1) testCliDriver_autogen_colalias(org.apache.hadoop.hive.cli.TestCliDriver)junit.framework.AssertionFailedError: Unexpected exception
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_autogen_colalias(TestCliDriver.java:4780)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+FAILURES!!!
+Tests run: 25,  Failures: 1,  Errors: 0
+

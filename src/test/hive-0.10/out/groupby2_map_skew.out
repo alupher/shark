@@ -1,0 +1,6 @@
+.Begin query: groupby2_map_skew.q
+Deleted hdfs://localhost:8020/root/hive-0.10.0/build/ql/test/data/warehouse/dest1
+46.690: [GC 3219584K->74918K(12058624K), 0.0971680 secs]
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/groupby2_map_skew.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/groupby2_map_skew.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/groupby2_map_skew.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/groupby2_map_skew.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: groupby2_map_skew.q elapsedTime=8s

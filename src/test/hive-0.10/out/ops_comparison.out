@@ -1,0 +1,5 @@
+.Begin query: ops_comparison.q
+87.847: [GC 3250680K->110778K(12058624K), 0.1796280 secs]
+Comparing: /root/hive-0.10.0/build/ql/test/logs/clientpositive/ops_comparison.q.out /root/hive-0.10.0/ql/src/test/results/clientpositive/ops_comparison.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.10.0/build/ql/test/logs/clientpositive/ops_comparison.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.10.0/ql/src/test/results/clientpositive/ops_comparison.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: ops_comparison.q elapsedTime=7s
