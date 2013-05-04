@@ -1,0 +1,7 @@
+F.Begin query: loadpart1.q
+Copying file: file:/root/hive-0.9.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/hive_test_src
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/hive_test_dst/pcol1=test_part/pcol2=test_Part
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/loadpart1.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/loadpart1.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/loadpart1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/loadpart1.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: loadpart1.q elapsedTime=5s

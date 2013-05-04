@@ -1,0 +1,34 @@
+.Begin query: sample_islocalmode_hook.q
+19.382: [GC 3149199K->74015K(12058624K), 0.1266930 secs]
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/sample_islocalmode_hook.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/sample_islocalmode_hook.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/sample_islocalmode_hook.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/sample_islocalmode_hook.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+4,6c4,6
+< 1500
+< 1500
+< 3084
+---
+> 25
+> 25
+> 49
+Exception: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+junit.framework.AssertionFailedError: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at junit.framework.Assert.fail(Assert.java:50)
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_sample_islocalmode_hook(TestCliDriver.java:31167)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at junit.textui.TestRunner.doRun(TestRunner.java:116)
+	at junit.textui.TestRunner.start(TestRunner.java:180)
+	at junit.textui.TestRunner.main(TestRunner.java:138)
+Failed query: sample_islocalmode_hook.q

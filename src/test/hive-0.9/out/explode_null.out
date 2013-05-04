@@ -1,0 +1,5 @@
+.Begin query: explode_null.q
+21.982: [GC 3149199K->72707K(12058624K), 0.1246580 secs]
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/explode_null.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/explode_null.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/explode_null.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/explode_null.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: explode_null.q elapsedTime=2s

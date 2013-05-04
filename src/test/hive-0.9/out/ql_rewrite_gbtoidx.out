@@ -1,0 +1,16 @@
+.Begin query: ql_rewrite_gbtoidx.q
+Copying file: file:/root/hive-0.9.0/data/files/lineitem.txt
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/lineitem
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__lineitem_lineitem_lshipdate_idx__
+128.763: [GC 3233400K->92560K(12058624K), 0.1501530 secs]
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tbl_tbl_key_idx__
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tblpart_tbl_part_index__/ds=2008-04-08/hr=11
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tblpart_tbl_part_index__/ds=2008-04-08/hr=12
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tblpart_tbl_part_index__/ds=2008-04-09/hr=11
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tblpart_tbl_part_index__/ds=2008-04-09/hr=12
+Copying file: file:/root/hive-0.9.0/data/files/tbl.txt
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/tbl
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/default__tbl_tbl_key_idx__
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/ql_rewrite_gbtoidx.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/ql_rewrite_gbtoidx.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/ql_rewrite_gbtoidx.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/ql_rewrite_gbtoidx.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: ql_rewrite_gbtoidx.q elapsedTime=242s

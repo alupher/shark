@@ -1,0 +1,7 @@
+.Begin query: rcfile_lazydecompress.q
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/rcfiletablelazydecompress
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/rcfiletablelazydecompress
+43.937: [GC 3219114K->77030K(12058624K), 0.1583380 secs]
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/rcfile_lazydecompress.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/rcfile_lazydecompress.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/rcfile_lazydecompress.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/rcfile_lazydecompress.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: rcfile_lazydecompress.q elapsedTime=5s

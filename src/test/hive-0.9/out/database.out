@@ -1,0 +1,12 @@
+.Begin query: database.q
+15.828: [GC 3149199K->51226K(12058624K), 0.1097080 secs]
+Copying file: file:/root/hive-0.9.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/test_db.db/test_table
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/to_drop_db2.db/temp_tbl2
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/db1.db/src
+Copying file: file:/root/hive-0.9.0/data/files/kv1.txt
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/bucketized_src
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/database.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/database.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/database.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/database.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: database.q elapsedTime=17s

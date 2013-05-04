@@ -1,0 +1,52 @@
+F.Begin query: alter_merge.q
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_1.rc
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_2.rc
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_3.rc
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/src_rc_merge_test
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_1.rc
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_2.rc
+Copying file: file:/root/hive-0.9.0/data/files/smbbucket_3.rc
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/src_rc_merge_test_part/ds=2011
+115.338: [GC 3197230K->75142K(12058624K), 0.1776740 secs]
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/alter_merge.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/alter_merge.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/alter_merge.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/alter_merge.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+47,48c47,48
+< maxFileSize:334
+< maxFileSize:334
+---
+> maxFileSize:239
+> maxFileSize:239
+51,52c51,52
+< minFileSize:334
+< minFileSize:334
+---
+> minFileSize:239
+> minFileSize:239
+202,203c218,219
+< totalFileSize:334
+< totalFileSize:334
+---
+> totalFileSize:239
+> totalFileSize:239
+Exception: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+junit.framework.AssertionFailedError: Client execution results failed with error code = 1
+See build/ql/tmp/hive.log, or try "ant test ... -Dtest.silent=false" to get more logs.
+	at junit.framework.Assert.fail(Assert.java:50)
+	at org.apache.hadoop.hive.cli.TestCliDriver.testCliDriver_alter_merge(TestCliDriver.java:1434)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at junit.textui.TestRunner.doRun(TestRunner.java:116)
+	at junit.textui.TestRunner.start(TestRunner.java:180)
+	at junit.textui.TestRunner.main(TestRunner.java:138)
+Failed query: alter_merge.q

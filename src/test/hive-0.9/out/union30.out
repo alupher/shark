@@ -1,0 +1,5 @@
+.Begin query: union30.q
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/union_subq_union
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/union30.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/union30.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/union30.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/union30.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: union30.q elapsedTime=9s

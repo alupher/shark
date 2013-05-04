@@ -1,0 +1,13 @@
+.Begin query: global_limit.q
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+42.396: [GC 3164589K->75863K(12058624K), 0.1355350 secs]
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/gl_tgt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket21.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Copying file: file:/root/hive-0.9.0/data/files/srcbucket20.txt
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/global_limit.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/global_limit.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/global_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/global_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: global_limit.q elapsedTime=20s

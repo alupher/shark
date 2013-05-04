@@ -1,0 +1,10 @@
+.Begin query: ppd_multi_insert.q
+83.190: [GC 3222744K->84354K(12058624K), 0.1385380 secs]
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/mi1
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/mi2
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/mi1
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/mi2
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/mi3/ds=2008-04-08/hr=12
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/ppd_multi_insert.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/ppd_multi_insert.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/ppd_multi_insert.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/ppd_multi_insert.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: ppd_multi_insert.q elapsedTime=10s

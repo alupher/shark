@@ -1,0 +1,5 @@
+F.Begin query: groupby1_limit.q
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/dest1
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/groupby1_limit.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/groupby1_limit.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/groupby1_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/groupby1_limit.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: groupby1_limit.q elapsedTime=4s

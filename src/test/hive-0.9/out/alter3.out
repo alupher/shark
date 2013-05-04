@@ -1,0 +1,9 @@
+.Begin query: alter3.q
+Copying file: file:/root/hive-0.9.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/alter3_src
+Copying file: file:/root/hive-0.9.0/data/files/test.dat
+Deleted hdfs://localhost:8020/root/hive-0.9.0/build/ql/test/data/warehouse/alter3_db.db/alter3_src
+34.019: [GC 3165072K->53027K(12058624K), 0.0940930 secs]
+Comparing: /root/hive-0.9.0/build/ql/test/logs/clientpositive/alter3.q.out /root/hive-0.9.0/ql/src/test/results/clientpositive/alter3.q.out
+"diff" "-a" "-I" "PREHOOK" "-I" "POSTHOOK" <(sort /root/hive-0.9.0/build/ql/test/logs/clientpositive/alter3.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g') <(sort /root/hive-0.9.0/ql/src/test/results/clientpositive/alter3.q.out | perl -p -e 's/(\d\.\d{5})\d*/\1/g;' -e 's/\s+$/\n/g')
+Done query: alter3.q elapsedTime=11s
