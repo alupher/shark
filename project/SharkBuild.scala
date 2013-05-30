@@ -74,6 +74,7 @@ object SharkBuild extends Build {
       "org.apache.hadoop" % "hadoop-core" % HADOOP_VERSION,
       "it.unimi.dsi" % "fastutil" % "6.4.2",
       "org.scalatest" %% "scalatest" % "1.6.1" % "test",
+      "org.apache.zookeeper" % "zookeeper" % "3.4.5",
       "junit" % "junit" % "4.10" % "test")
 
   ) ++ assemblySettings ++ Seq(test in assembly := {}) ++ Seq(getClassPathTask)

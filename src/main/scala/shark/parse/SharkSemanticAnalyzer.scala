@@ -65,7 +65,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
     reset()
 
     val qb = new QB(null, null, false)
-    val pctx = getParseContext()
+    var pctx = getParseContext()
     pctx.setQB(qb)
     pctx.setParseTree(ast)
     initParseCtx(pctx)
@@ -147,17 +147,15 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
       ).asInstanceOf[JavaList[FieldSchema]]
 
     // Run Hive optimization.
-    var pCtx: ParseContext = getParseContext
     val optm = new SharkOptimizer()
-    optm.setPctx(pCtx)
+    optm.setPctx(pctx)
     optm.initialize(conf)
-    pCtx = optm.optimize()
-    initParseCtx(pCtx)
+    pctx = optm.optimize()
 
     // Replace Hive physical plan with Shark plan. This needs to happen after
     // Hive optimization.
     val hiveSinkOps = SharkSemanticAnalyzer.findAllHiveFileSinkOperators(
-      pCtx.getTopOps().values().head)
+      pctx.getTopOps().values().head)
 
     if (hiveSinkOps.size == 1) {
       // For a single output, we have the option of choosing the output
