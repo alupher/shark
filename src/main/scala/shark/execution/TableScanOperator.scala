@@ -277,7 +277,7 @@ class TableScanOperator extends TopOperator[HiveTableScanOperator] with HiveTopO
     }
     new HiveInputFormat() {
       def doPushFilters() {
-        pushFilters(conf, hiveOp)
+        HiveInputFormat.pushFilters(conf, hiveOp)
       }
     }.doPushFilters()
     FileInputFormat.setInputPaths(conf, path)

@@ -169,7 +169,7 @@ class MapJoinOperator extends CommonJoinOperator[MapJoinDesc, HiveMapJoinOperato
         joinValuesObjectInspectors.get(posByte),
         joinFilters.get(posByte),
         joinFilterObjectInspectors.get(posByte),
-        if (filterMap == null) null else filterMap(posByte))
+        (filterMap == null))
       // If we've seen the key before, just add it to the row container wrapped by
       // corresponding MapJoinObjectValue.
       val objValue = valueMap.get(key)
@@ -209,9 +209,8 @@ class MapJoinOperator extends CommonJoinOperator[MapJoinDesc, HiveMapJoinOperato
         joinValuesObjectInspectors.get(bigTableAliasByte),
         joinFilters.get(bigTableAliasByte),
         joinFilterObjectInspectors.get(bigTableAliasByte),
-        // xxx fix:
-        // if (filterMap == null) null else filterMap(bigTableAlias))
-        noOuterJoin)
+        (filterMap == null))
+
       val value = new Array[AnyRef](v.size)
       Range(0,v.size).foreach(i => value(i) = v(i).asInstanceOf[SerializableWritable[_]].value)
 

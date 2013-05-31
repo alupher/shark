@@ -176,12 +176,13 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
             OperatorFactory.createSharkFileOutputPlan(hiveSinkOp)
           } else {
             // Otherwise, check if we are inserting into a table that was cached.
-            val cachedTableName = tableName.split('.')(1) // Ignore the database name
+            val cachedTableName = tableName.split('.')(1)
+            val cachedDbName = tableName.split('.')(0)
             SharkEnv.memoryMetadataManager.get(cachedTableName) match {
               case Some(rdd) => {
                 if (hiveSinkOps.size == 1) {
                   // If useUnionRDD is false, the sink op is for INSERT OVERWRITE.
-                  val useUnionRDD = qb.getParseInfo.isInsertIntoTable(cachedTableName)
+                  val useUnionRDD = qb.getParseInfo.isInsertIntoTable(cachedDbName, cachedTableName)
                   OperatorFactory.createSharkMemoryStoreOutputPlan(
                     hiveSinkOp,
                     cachedTableName,
