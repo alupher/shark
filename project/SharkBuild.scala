@@ -90,7 +90,7 @@ object SharkBuild extends Build {
       "org.spark-project" %% "spark-core" % SPARK_VERSION,
       "org.spark-project" %% "spark-repl" % SPARK_VERSION,
       "com.google.guava" % "guava" % "11.0.1",
-      "org.apache.hadoop" % "hadoop-core" % HADOOP_VERSION,
+      "org.apache.hadoop" % "hadoop-core" % HADOOP_VERSION excludeAll( ExclusionRule(organization = "org.codehaus.jackson") ),
       "it.unimi.dsi" % "fastutil" % "6.4.2",
       "org.apache.zookeeper" % "zookeeper" % "3.4.5",
       "org.scalatest" %% "scalatest" % "1.9.1" % "test",
