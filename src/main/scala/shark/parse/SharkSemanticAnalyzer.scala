@@ -80,6 +80,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
     var shouldReset = false
 
     if (ast.getToken().getType() == HiveParser.TOK_CREATETABLE) {
+      init()
       super.analyzeInternal(ast)
       for (ch <- ast.getChildren) {
         ch.asInstanceOf[ASTNode].getToken.getType match {
@@ -92,7 +93,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
         }
       }
 
-      // If the table descriptor can be null if the CTAS has an
+      // The table descriptor can be null if the CTAS has an
       // "if not exists" condition.
       val td = getParseContext.getQB.getTableDesc
       if (!isCTAS || td == null) {
@@ -324,12 +325,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
     // dependent of the main SparkTask.
     if (qb.isCTAS) {
       val crtTblDesc: CreateTableDesc = qb.getTableDesc
-
-      // Use reflection to call validateCreateTable, which is private.
-      val validateCreateTableMethod = this.getClass.getSuperclass.getDeclaredMethod(
-        "validateCreateTable", classOf[CreateTableDesc])
-      validateCreateTableMethod.setAccessible(true)
-      validateCreateTableMethod.invoke(this, crtTblDesc)
+      crtTblDesc.validate()
 
       // Clear the output for CTAS since we don't need the output from the
       // mapredWork, the DDLWork at the tail of the chain will have the output.

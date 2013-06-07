@@ -33,7 +33,8 @@ object SharkBuild extends Build {
   val HADOOP_VERSION = "1.0.4"
 
   // Whether to build Shark with Tachyon jar.
-  val TACHYON_ENABLED = true
+  // Disabling for now becuase Hive 0.10.0 uses a newer thrift version (that conflicts with Tachyon's)
+  val TACHYON_ENABLED = false
 
   lazy val root = Project(
     id = "root",
