@@ -35,8 +35,8 @@ import org.apache.hadoop.hive.ql.plan._
 import org.apache.hadoop.hive.ql.session.SessionState
 
 import shark.{CachedTableRecovery, LogHelper, SharkConfVars, SharkEnv, SharkOptimizer, Utils}
-import shark.execution.{HiveOperator, Operator, OperatorFactory, ReduceSinkOperator, SparkWork,
-  TerminalOperator}
+import shark.execution.{HiveOperator, Operator, OperatorFactory, RDDUtils, ReduceSinkOperator,
+  SparkWork, TerminalOperator}
 import shark.memstore2.{CacheType, ColumnarSerDe, MemoryMetadataManager}
 
 import spark.storage.StorageLevel
@@ -184,10 +184,11 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
                 if (hiveSinkOps.size == 1) {
                   // If useUnionRDD is false, the sink op is for INSERT OVERWRITE.
                   val useUnionRDD = qb.getParseInfo.isInsertIntoTable(cachedDbName, cachedTableName)
+                  val storageLevel = RDDUtils.getStorageLevelOfCachedTable(rdd)
                   OperatorFactory.createSharkMemoryStoreOutputPlan(
                     hiveSinkOp,
                     cachedTableName,
-                    rdd.getStorageLevel,
+                    storageLevel,
                     _resSchema.size,                // numColumns
                     cacheMode == CacheType.tachyon, // use tachyon
                     useUnionRDD)
