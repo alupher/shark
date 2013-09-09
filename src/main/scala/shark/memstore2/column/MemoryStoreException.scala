@@ -15,25 +15,7 @@
  * limitations under the License.
  */
 
-package shark.memstore2
-
-import shark.memstore2.column.ColumnStats
+package shark.memstore2.column
 
 
-/**
- * Stores column statistics for a table partition.
- */
-class TablePartitionStats(val stats: Array[ColumnStats[_]], val numRows: Long)
-  extends Serializable {
-
-  override def toString =
-    numRows + " rows\n" +
-    stats.zipWithIndex.map { case (column, index) =>
-      "  column " + index + " " +
-      { if (column != null) column.toString else "no column statistics" }
-    }.mkString("\n")
-
-  def estimateCardinality() {
-    stats.foreach(_.estimateCardinality())
-  }
-}
+class MemoryStoreException(message: String) extends Exception(message)
