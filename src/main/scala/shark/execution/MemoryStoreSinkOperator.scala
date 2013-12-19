@@ -17,11 +17,13 @@
 
 package shark.execution
 
+import scala.collection.JavaConversions._
 import java.nio.ByteBuffer
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{ArrayBuffer, HashMap}
 import scala.reflect.BeanProperty
 
+import com.clearspring.analytics.stream.cardinality.HyperLogLog
 import org.apache.hadoop.io.Writable
 
 import org.apache.spark.rdd.RDD
@@ -31,7 +33,6 @@ import shark.{SharkConfVars, SharkEnv}
 import shark.execution.serialization.{OperatorSerializationWrapper, JavaSerializer}
 import shark.memstore2._
 import shark.tachyon.TachyonTableWriter
-
 
 /**
  * Cache the RDD and force evaluate it (so the cache is filled).
@@ -62,6 +63,7 @@ class MemoryStoreSinkOperator extends TerminalOperator {
     val inputRdd = if (parentOperators.size == 1) executeParents().head._2 else null
 
     val statsAcc = SharkEnv.sc.accumulableCollection(ArrayBuffer[(Int, TablePartitionStats)]())
+    val hllAcc = SharkEnv.sc.accumulableCollection(ArrayBuffer[(Int, HyperLogLog)]())
     val op = OperatorSerializationWrapper(this)
 
     val tachyonWriter: TachyonTableWriter =
@@ -173,14 +175,20 @@ class MemoryStoreSinkOperator extends TerminalOperator {
     // Get the column statistics back to the cache manager.
     SharkEnv.memoryMetadataManager.putStats(tableName, columnStats)
 
+    // Get table-level column cardinalities and add to cache manager
+    val colToCardinality = computeTableCardinality(statsAcc.value)
+    SharkEnv.memoryMetadataManager.putCardinality(tableName, colToCardinality)
+
     if (tachyonWriter != null) {
       tachyonWriter.updateMetadata(ByteBuffer.wrap(JavaSerializer.serialize(columnStats)))
+      // TODO: serialize table-level cardinality and persist to tachyon here too
     }
 
     if (SharkConfVars.getBoolVar(localHconf, SharkConfVars.MAP_PRUNING_PRINT_DEBUG)) {
       columnStats.foreach { case(index, tableStats) =>
         println("Partition " + index + " " + tableStats.toString)
       }
+      // TODO: print cardinality stats here too
     }
 
     // Return the cached RDD.
@@ -189,4 +197,23 @@ class MemoryStoreSinkOperator extends TerminalOperator {
 
   override def processPartition(split: Int, iter: Iterator[_]): Iterator[_] =
     throw new UnsupportedOperationException("CacheSinkOperator.processPartition()")
+
+  /**
+   * Merge column cardinalities of each partition to get table-level cardinality
+   */
+  private def computeTableCardinality(statsAcc: ArrayBuffer[(Int, TablePartitionStats)]):
+    HashMap[Int, Long] = {
+    val colToEstimator = new HashMap[Int, HyperLogLog]
+    statsAcc.foreach{case (partId, tpStats) => 
+      tpStats.stats.zipWithIndex foreach { case (colStats, colIdx) =>
+        val estimator = HyperLogLog.Builder.build(colStats.getEstimatorSerialized)
+        if (colToEstimator.contains(colIdx)) {
+          colToEstimator(colIdx) = colToEstimator(colIdx).merge(estimator).asInstanceOf[HyperLogLog]
+        } else {
+          colToEstimator(colIdx) = estimator.asInstanceOf[HyperLogLog]
+        }
+      }
+    }
+    colToEstimator.map{ case(colId, estimator) => (colId, estimator.cardinality()) }
+  }
 }

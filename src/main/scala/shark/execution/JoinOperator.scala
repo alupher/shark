@@ -99,9 +99,12 @@ class JoinOperator extends CommonJoinOperator[JoinDesc, HiveJoinOperator]
       logError("rdds.size (%d) != rddsJavaMap.size (%d)".format(rdds.size, rddsJavaMap.size))
     })
 
+    /*
     val rddsInJoinOrder = order.map { inputIndex =>
       rddsJavaMap.get(inputIndex.byteValue.toInt).asInstanceOf[RDD[(ReduceKey, Any)]]
     }
+    */
+    val rddsInJoinOrder = rddsJavaMap.keys.map { case(index) => rddsJavaMap(index) }
 
     val part = new HashPartitioner(numReduceTasks)
     val cogrouped = new CoGroupedRDD[ReduceKey](
@@ -145,7 +148,9 @@ class JoinOperator extends CommonJoinOperator[JoinDesc, HiveJoinOperator]
     val bytes = new BytesWritable
     val tmp = new Array[Object](2)
 
-    val tupleSizes = joinVals.map((e) => e.size).toIndexedSeq
+    //val tupleSizes = joinVals.map((e) => e.size).toIndexedSeq
+    // Preserve the expected order of the output row (not necessarily join order)
+    val tupleSizes = order.map((index) => joinVals(index.byteValue.toInt).size).toIndexedSeq
     val offsets = tupleSizes.scanLeft(0)(_ + _)
 
     val rowSize = offsets.last
@@ -167,7 +172,8 @@ class JoinOperator extends CommonJoinOperator[JoinDesc, HiveJoinOperator]
           val joinVal = joinVals(index)
           while (i < joinVal.size) {
             val joinValObjectInspectors = joinValuesObjectInspectors(index.toByte)
-            outputRow(i + offsets(index)) = ObjectInspectorUtils.copyToStandardObject(
+            //outputRow(i + offsets(index)) = ObjectInspectorUtils.copyToStandardObject(
+            outputRow(i + offsets(order(index).byteValue.toInt)) = ObjectInspectorUtils.copyToStandardObject(
               joinVal(i).evaluate(tmp), joinValObjectInspectors(i),
               ObjectInspectorUtils.ObjectInspectorCopyOption.WRITABLE)
             i += 1

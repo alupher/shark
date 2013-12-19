@@ -36,6 +36,9 @@ class MemoryMetadataManager {
   private val _keyToStats: ConcurrentMap[String, collection.Map[Int, TablePartitionStats]] =
     new ConcurrentHashMap[String, collection.Map[Int, TablePartitionStats]]
 
+  private val _keyToCardinality: ConcurrentMap[String, collection.Map[Int, Long]] =
+    new ConcurrentHashMap[String, collection.Map[Int, Long]]
+
   def contains(key: String) = _keyToRdd.contains(key.toLowerCase)
 
   def put(key: String, rdd: RDD[_]) {
@@ -50,6 +53,14 @@ class MemoryMetadataManager {
 
   def getStats(key: String): Option[collection.Map[Int, TablePartitionStats]] = {
     _keyToStats.get(key.toLowerCase)
+  }
+
+  def putCardinality(key: String, card: collection.Map[Int, Long]) = {
+    _keyToCardinality.put(key.toLowerCase, card)
+  }
+
+  def getCardinality(key: String): Option[collection.Map[Int, Long]] = {
+    _keyToCardinality.get(key.toLowerCase)
   }
 
   /**

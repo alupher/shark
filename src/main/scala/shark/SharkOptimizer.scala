@@ -23,13 +23,14 @@ import org.apache.hadoop.hive.ql.optimizer.{Optimizer => HiveOptimizer,
   SimpleFetchOptimizer, Transform}
 import org.apache.hadoop.hive.ql.parse.{ParseContext}
 
+
 class SharkOptimizer extends HiveOptimizer with LogHelper {
 
   /**
    * Override Hive optimizer to skip SimpleFetchOptimizer, which is designed 
    * to let Hive avoid launching MR jobs on simple queries, but rewrites the 
    * query plan in a way that is inconvenient for Shark (replaces the FS operator 
-   *with a non-terminal ListSink operator).
+   * with a non-terminal ListSink operator).
    */
   override def optimize(): ParseContext  = {
 

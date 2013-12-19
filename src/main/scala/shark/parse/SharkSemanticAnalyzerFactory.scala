@@ -34,6 +34,7 @@ object SharkSemanticAnalyzerFactory {
 
     if (baseSem.isInstanceOf[ColumnStatsSemanticAnalyzer]) {
       new SharkColumnStatsSemanticAnalyzer(conf, tree)
+      //new ColumnStatsSemanticAnalyzer(conf, tree)
     } else if (baseSem.isInstanceOf[SemanticAnalyzer]) {
       new SharkSemanticAnalyzer(conf)
     } else if (baseSem.isInstanceOf[ExplainSemanticAnalyzer] &&
