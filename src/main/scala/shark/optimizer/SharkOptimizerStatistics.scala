@@ -81,7 +81,10 @@ class SharkOptimizerStatistics() extends LogHelper {
           colToStats(colName) = metaClient.getTableColumnStatistics(dbName, tableName, colName)
         } catch {
           case e: NoSuchObjectException =>
-            logInfo("No column stats available for "+tableName+"."+colName)
+            logInfo("No column stats available for "+tableName+"."+colName+" - NoSuchObjectException")
+            colToStats(colName) = null
+          case  _ =>
+            logInfo("No column stats available for "+tableName+"."+colName+" - other exception")
             colToStats(colName) = null
         }
       })
@@ -118,6 +121,7 @@ class SharkOptimizerStatistics() extends LogHelper {
     var colCard: Long = 0
 
     if (colToCard.containsKey(tableName+"."+columnName)) {
+      logInfo("getColumnCardinality("+tableName+"."+columnName+") from colToCard cache")
       colToCard(tableName+"."+columnName)
     } else {
       // Get column cardinality from Shark stats
@@ -129,6 +133,7 @@ class SharkOptimizerStatistics() extends LogHelper {
           (fieldTuple: Tuple2[FieldSchema, Int]) =>
             (fieldTuple._1.getName() == columnName)).unzip._2(0)
         colCard = tabToSharkCardStats(tableName)(colIndex)
+        logInfo("getColumnCardinality("+tableName+"."+columnName+") from shark column stats")
       }
 
       // Get column cardinality from Hive stats only if we can't get it from Shark
@@ -149,6 +154,7 @@ class SharkOptimizerStatistics() extends LogHelper {
               } else if (statsData.isSetStringStats()) {
                 colCard = statsData.getStringStats().getNumDVs()
               }
+              logInfo("getColumnCardinality("+tableName+"."+columnName+") from hive stats")
             }
           }
         }
