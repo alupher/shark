@@ -160,9 +160,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
     // by genPlan. This has the correct column names, which clients
     // such as JDBC would prefer instead of the c0, c1 we'll end
     // up with later.
-    val hiveSinkOp = sharkGenPlan(qb, optimizerStats).asInstanceOf[org.apache.hadoop.hive.ql.exec.FileSinkOperator]
-    //val hiveSinkOp = genPlan(qb).asInstanceOf[org.apache.hadoop.hive.ql.exec.FileSinkOperator]
-
+    val hiveSinkOp = sharkGenPlan(qb, optimizerStats, conf)
 
     // Use reflection to invoke convertRowSchemaToViewSchema.
     _resSchema = SharkSemanticAnalyzer.convertRowSchemaToViewSchemaMethod.invoke(
@@ -402,7 +400,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
    * Override Hive SemAnalyzer's genPlan to let the optimizer manipulate the join tree before the
    * individual operators are created.
    */
-  def sharkGenPlan(qb: org.apache.hadoop.hive.ql.parse.QB, optimizerStats: SharkOptimizerStatistics): HiveOp[_] = {
+  def sharkGenPlan(qb: QB, optimizerStats: SharkOptimizerStatistics, conf: HiveConf): HiveOp[_] = {
 
     // Make private methods accessible
     val genPlanMethod = classOf[SemanticAnalyzer].getDeclaredMethod("genPlan", classOf[QBExpr])
@@ -508,7 +506,7 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
         val joinTree = genJoinTreeMethod.invoke(this, qb, joinExpr, aliasToOpInfo).asInstanceOf[QBJoinTree]
         qb.setQbJoinTree(joinTree)
 
-        // Merge join tree levels, where possible. TODO: invoke after optimizing tree
+        // Note: we invoke this *after* optimizing tree instead
         //mergeJoinTreeMethod.invoke(this, qb)
       }
 
@@ -522,8 +520,10 @@ class SharkSemanticAnalyzer(conf: HiveConf) extends SemanticAnalyzer(conf) with 
 
       // Manipulate the join tree using Shark's cost-based optimizer
       val joinOptimizer = new JoinOptimizer()
-      joinOptimizer.initialize(this, qb, aliasToOpInfo, optimizerStats, opParseCtxs)
+      joinOptimizer.initialize(this, qb, aliasToOpInfo, optimizerStats, opParseCtxs, conf)
       joinOptimizer.optimizeJoinTree()
+
+      // Merge join tree levels, where possible.
       mergeJoinTreeMethod.invoke(this, qb)
 
       srcOpInfo = genJoinPlanMethod.invoke(this, qb, aliasToOpInfo).asInstanceOf[HiveOp[_ <: OperatorDesc]]
@@ -612,5 +612,4 @@ object SharkSemanticAnalyzer extends LogHelper {
       }
     }
   }
-
 }

@@ -24,7 +24,7 @@ import java.io.Externalizable
 import java.sql.Timestamp
 import com.clearspring.analytics.stream.cardinality.HyperLogLog
 import org.apache.hadoop.io.Text
-import com.codahale.metrics.Histogram
+//import com.codahale.metrics.Histogram
 
 /**
  * Column level statistics, including range (min, max).

@@ -55,6 +55,13 @@ object SharkConfVars {
   // If true, then query plans are compressed before being sent
   val COMPRESS_QUERY_PLAN = new ConfVar("shark.queryPlan.compress", true)
 
+  // If true, re-order the join tree using the cost-based optimizer.
+  val OPTIMIZE_JOINS = new ConfVar("shark.optimize.joins", true)
+
+  // If true, cost-based optimizer accumulates the IO cost of previous plans at each step
+  val OPTIMIZE_JOIN_IO = new ConfVar("shark.optimize.join.io", false)
+
+
   // Add Shark configuration variables and their default values to the given conf,
   // so default values show up in 'set'.
   def initializeWithDefaults(conf: Configuration) {
@@ -81,6 +88,12 @@ object SharkConfVars {
     }
     if (conf.get(MAP_PRUNING_PRINT_DEBUG.varname) == null) {
       conf.setBoolean(MAP_PRUNING_PRINT_DEBUG.varname, MAP_PRUNING_PRINT_DEBUG.defaultBoolVal)
+    }
+    if (conf.get(OPTIMIZE_JOINS.varname) == null) {
+      conf.setBoolean(OPTIMIZE_JOINS.varname, OPTIMIZE_JOINS.defaultBoolVal)
+    }
+    if (conf.get(OPTIMIZE_JOIN_IO.varname) == null) {
+      conf.setBoolean(OPTIMIZE_JOIN_IO.varname, OPTIMIZE_JOIN_IO.defaultBoolVal)
     }
   }
 

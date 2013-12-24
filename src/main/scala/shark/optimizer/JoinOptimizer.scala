@@ -20,7 +20,7 @@ package shark.optimizer
 import org.apache.hadoop.hive.ql.exec.{Operator => HiveOp}
 import org.apache.hadoop.hive.ql.parse._
 
-import shark.{LogHelper}
+import shark.{SharkConfVars, LogHelper}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.{ArrayBuffer, HashMap}
@@ -28,6 +28,7 @@ import java.util.{ArrayList => JavaArrayList, HashMap => JavaHashMap,
                   HashSet => JavaHashSet, LinkedHashMap => JavaLinkedHashMap }
 import org.apache.hadoop.hive.ql.plan.{OperatorDesc, ExprNodeColumnDesc, ExprNodeDesc}
 import shark.parse.SharkSemanticAnalyzer
+import org.apache.hadoop.hive.conf.HiveConf
 
 class JoinOptimizer extends LogHelper {
   var qb: QB = _
@@ -35,6 +36,8 @@ class JoinOptimizer extends LogHelper {
   var optimizerStats: SharkOptimizerStatistics = _
   var opParseCtxs: JavaLinkedHashMap[HiveOp[_ <: OperatorDesc], OpParseContext] = _
   var sharkSemanticAnalyzer: SharkSemanticAnalyzer = _
+  var conf: HiveConf = _
+
   val allAliases = new scala.collection.mutable.HashSet[String]()
   val originalOrder = new ArrayBuffer[String]()
 
@@ -48,12 +51,14 @@ class JoinOptimizer extends LogHelper {
                   qb: QB,
                   aliasToOpInfo: JavaHashMap[String, HiveOp[_ <: OperatorDesc]],
                   optimizerStats: SharkOptimizerStatistics,
-                  opParseCtxs: JavaLinkedHashMap[HiveOp[_ <: OperatorDesc], OpParseContext]) {
+                  opParseCtxs: JavaLinkedHashMap[HiveOp[_ <: OperatorDesc], OpParseContext],
+                  conf: HiveConf) {
     this.qb = qb
     this.aliasToOpInfo = aliasToOpInfo
     this.optimizerStats = optimizerStats
     this.opParseCtxs = opParseCtxs
     this.sharkSemanticAnalyzer = sharkSA
+    this.conf = conf
   }
 
   /**
@@ -62,23 +67,28 @@ class JoinOptimizer extends LogHelper {
    * the current query block.
    */
   def optimizeJoinTree(): Unit =  {
-    if (isOptimizable(qb.getQbJoinTree())) {
-      logInfo("Beginning join optimization")
-      initializeAliasInfo(joinTreeToArray(qb.getQbJoinTree()))
+    val optimizeJoins = SharkConfVars.getBoolVar(conf, SharkConfVars.OPTIMIZE_JOINS)
 
+    logInfo("Beginning join optimization")
+    initializeAliasInfo(qb.getQbJoinTree())
+    logInfo("Hive's join order is: " + originalOrder.mkString(", "))
+
+    if (optimizeJoins && isOptimizable(qb.getQbJoinTree())) {
       // Get new join ordering
       val newJoinPlan = getBestJoinPlan(allAliases.toSet)
-      logInfo("Original join order was: " + originalOrder.mkString(", "))
       logInfo("Replacing with better join order: " + newJoinPlan.mkString(", "))
 
       // Convert join ordering into a new join tree
-      //val optimizedJoinTree = getNewJoinTree(originalOrder.toArray.reverse)
       val optimizedJoinTree = getNewJoinTree(newJoinPlan)
 
       // Save optimized join tree
       qb.setQbJoinTree(optimizedJoinTree)
-      logInfo("Join optimization complete")
+    } else {
+      logInfo("Not optimizing join operator execution plan.")
     }
+    logInfo("Printing final join tree: ")
+    printJoinTree(qb.getQbJoinTree)
+    logInfo("Join optimization complete")
   }
 
 
@@ -97,6 +107,12 @@ class JoinOptimizer extends LogHelper {
   def computeJoinCost (leftPlan: Array[String], rightAlias: String): Long = {
 
     val leftAlias = getJoinableLeftAlias(leftPlan, rightAlias)
+    val useAccumulatedCost = SharkConfVars.getBoolVar(conf, SharkConfVars.OPTIMIZE_JOIN_IO)
+    if (useAccumulatedCost) {
+      logInfo("Using accumulated cost function")
+    } else {
+      logInfo("Using traditional cost function")
+    }
 
     // Only use one predicate for now
     val rightRelJoinCol = aliasPairToExpressions(rightAlias, leftAlias)
@@ -115,7 +131,7 @@ class JoinOptimizer extends LogHelper {
       if (rightColCard > leftColCard) rightColCard else leftColCard).toDouble
 
     logInfo("Calculating cost of joining ["+leftPlan.mkString(", ")+"] with ["+rightAlias+"]")
-    logInfo("Join column cardinalities. Left: "+leftColCard+", Right: "+leftColCard)
+    logInfo("Join column cardinalities. Left: "+leftColCard+", Right: "+rightColCard)
     logInfo("Selectivity factor: "+selectivityFactor)
 
     // Left relation cardinality = Cached cost of left plan = num rows of left relation
@@ -132,15 +148,14 @@ class JoinOptimizer extends LogHelper {
     val rightCard: Long = optimizerStats.getNumRows(
       qb.getTabNameForAlias(rightAlias)).getOrElse(999999999)
 
-    logInfo("Left relation card: " + leftCard)
-    logInfo("Right relation card: " + rightCard)
+    logInfo("Relation cardinalities (numRows). Left: " + leftCard + ", Right: " + rightCard)
 
     val joinCost = selectivityFactor * leftCard * rightCard
     logInfo("Computed join cost: " + joinCost)
 
     // Sum with cost of previous joins if we have at least 3 relations
     // (2 on the left side, one on the right)
-    if (leftPlan.length > 1) {
+    if (leftPlan.length > 1 && useAccumulatedCost) {
       leftCard + joinCost.toLong
     } else {
       joinCost.toLong
@@ -272,12 +287,13 @@ class JoinOptimizer extends LogHelper {
   /**
    * Gather alias to expression info and which aliases are linked by join conditions.
    */
-  def initializeAliasInfo (nodes: Array[QBJoinTree]): Unit = {
+  def initializeAliasInfo (rightmostJoinTree: QBJoinTree): Unit = {
 
-    nodes.foreach(joinTree => {
-      val baseSrc = joinTree.getBaseSrc()
-      val leftAlias = joinTree.getLeftAlias
-      val rightAlias = joinTree.getBaseSrc()(1)
+    var curNode = rightmostJoinTree
+    while (curNode != null) {
+      val baseSrc = curNode.getBaseSrc()
+      val leftAlias = curNode.getLeftAlias
+      val rightAlias = curNode.getBaseSrc()(1)
 
       // Since this left-deep join tree has not yet been merged, there will be
       // at most one alias at each node, except for the left-most, which has two.
@@ -302,22 +318,29 @@ class JoinOptimizer extends LogHelper {
       if (!aliasPairToExpressions.containsKey(Tuple2(rightAlias, leftAlias))) {
         aliasPairToExpressions.put(Tuple2(rightAlias, leftAlias), new JavaArrayList[ASTNode]())
       }
-      aliasPairToExpressions(Tuple2(leftAlias, rightAlias)).addAll(joinTree.getExpressions()(0))
-      aliasPairToExpressions(Tuple2(rightAlias, leftAlias)).addAll(joinTree.getExpressions()(1))
+      aliasPairToExpressions(Tuple2(leftAlias, rightAlias)).addAll(curNode.getExpressions()(0))
+      aliasPairToExpressions(Tuple2(rightAlias, leftAlias)).addAll(curNode.getExpressions()(1))
 
-      // Get full set of aliases and their original order
+      // Get full set of aliases
       baseSrc.view.zipWithIndex foreach {
         case (baseSrcAlias, index) => {
-          val alias = if (baseSrcAlias == null) joinTree.getLeftAlias else baseSrcAlias
+          val alias = if (baseSrcAlias == null) curNode.getLeftAlias else baseSrcAlias
           if (alias != null) {
-            if (!allAliases.contains(alias)) {
-              originalOrder += alias
-            }
             allAliases.add(alias)
           }
         }
       }
-    })
+
+      // Get Hive's original join order. baseSrc(1) is right side, (0) is left.
+      if (baseSrc(1) != null) {
+        originalOrder += baseSrc(1)
+      }
+      if (baseSrc(0) != null) {
+        originalOrder += baseSrc(0)
+      }
+
+      curNode = curNode.getJoinSrc
+    }
   }
 
   /**
@@ -451,5 +474,29 @@ class JoinOptimizer extends LogHelper {
 
     val newTree = newJoinTreeNodes.last
     newTree
+  }
+
+  def printJoinTree (joinTree: QBJoinTree): Unit = {
+
+    logInfo("------------------------------")
+    logInfo("Join Tree ID: "+joinTree.getId)
+    logInfo("Base Src: " + joinTree.getBaseSrc().view.zipWithIndex
+      .map { case (alias, index) => index+":"+alias } .mkString(", "))
+    logInfo("Left alias: " + joinTree.getLeftAlias)
+    logInfo("Left aliases: " + joinTree.getLeftAliases().view.zipWithIndex
+      .map { case (alias, index) => index+":"+alias } .mkString(", "))
+    logInfo("Right aliases: " + joinTree.getRightAliases().view.zipWithIndex
+      .map { case (alias, index) => index+":"+alias } .mkString(", "))
+    logInfo("Left expressions: "+ joinTree.getExpressions()(0).view.zipWithIndex
+      .map { case (exp, index) => {
+        val expNodeDesc = exprToExprNodeDesc(exp, joinTree.getLeftAlias)
+        "("+index+": "+expNodeDesc.getExprString()+")"
+      }}.mkString(", "))
+
+    logInfo("------------------------------")
+
+    if (joinTree.getJoinSrc() != null) {
+      printJoinTree(joinTree.getJoinSrc())
+    }
   }
 }
