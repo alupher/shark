@@ -61,6 +61,8 @@ object SharkConfVars {
   // If true, cost-based optimizer accumulates the IO cost of previous plans at each step
   val OPTIMIZE_JOIN_IO = new ConfVar("shark.optimize.join.io", false)
 
+  // If true, cost-based optimizer picks the absolute worst order (just for testing!)
+  val OPTIMIZER_PICK_WORST_ORDER = new ConfVar("shark.optimizer.worst.order", false)
 
   // Add Shark configuration variables and their default values to the given conf,
   // so default values show up in 'set'.
@@ -94,6 +96,9 @@ object SharkConfVars {
     }
     if (conf.get(OPTIMIZE_JOIN_IO.varname) == null) {
       conf.setBoolean(OPTIMIZE_JOIN_IO.varname, OPTIMIZE_JOIN_IO.defaultBoolVal)
+    }
+    if (conf.get(OPTIMIZER_PICK_WORST_ORDER.varname) == null) {
+      conf.setBoolean(OPTIMIZER_PICK_WORST_ORDER.varname, OPTIMIZER_PICK_WORST_ORDER.defaultBoolVal)
     }
   }
 

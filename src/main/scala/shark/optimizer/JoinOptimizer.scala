@@ -206,6 +206,9 @@ class JoinOptimizer extends LogHelper {
     val levels = input.size
     var curLevel = 1
 
+    val pickWorstOrder = SharkConfVars.getBoolVar(conf, SharkConfVars.OPTIMIZER_PICK_WORST_ORDER)
+    if (pickWorstOrder) logInfo("WORST join order") else logInfo("BEST join order")
+
     while (curLevel <= levels) {
       // At the first level, we save each relation
       if (curLevel == 1) {
@@ -235,7 +238,11 @@ class JoinOptimizer extends LogHelper {
 
               // Retain this plan and cost, but only if cheapest so far (for current set)
               val curSet = leftRelations + relation
-              if ( ! bestJoinCardinality.containsKey(curSet) ||  joinCost < bestJoinCardinality(curSet)) {
+              // xxx temporarily allowing worst join orders to be picked
+              //if ( ! bestJoinCardinality.containsKey(curSet) ||  joinCost < bestJoinCardinality(curSet)) {
+              if ( ! bestJoinCardinality.containsKey(curSet) ||
+                (pickWorstOrder && joinCost > bestJoinCardinality(curSet)) ||
+                (!pickWorstOrder && joinCost < bestJoinCardinality(curSet))) {
 
                 // Plan = best n-1 subset's plan joined to current relation
                 val plan = bestJoinPlans(leftRelations) ++ Array(relation)
