@@ -49,17 +49,23 @@ class SharkOptimizerStatistics() extends LogHelper {
 
     val metaClient = new HiveMetaStoreClient(conf)
     val aliases = qb.getTabAliases().toArray
-    val tables = new JArrayList[String]
-    aliases.foreach(alias => tables.add(qb.getTabNameForAlias(alias.asInstanceOf[String])))
+    val tableNames = new JArrayList[String]
+    aliases.foreach(alias => tableNames.add(qb.getTabNameForAlias(alias.asInstanceOf[String])))
 
     // Get schema (with column info) for each table
     schemas = new HashMap[String, JList[FieldSchema]]
-    tables.foreach(tableName => {
+    tableNames.foreach(tableName => {
       schemas(tableName) = metaClient.getSchema(dbName, tableName)
     })
 
+    // Get table objects
+    val tableNameToTable = new HashMap[String, Table]
+    tableNames.foreach(tableName =>
+      tableNameToTable(tableName) = metaClient.getTable(dbName, tableName)
+    )
+    
     // Get table sizes from Hive metadata for tables which have stats calculated
-    tables.foreach(tableName => {
+    tableNames.foreach(tableName => {
       val table = metaClient.getTable(dbName, tableName)
       val tParams = table.getParameters()
 
@@ -72,47 +78,38 @@ class SharkOptimizerStatistics() extends LogHelper {
       }
     })
 
-    tabToHiveColStats = new HashMap[String, HashMap[String, ColumnStatistics]]
-    tables.foreach(tableName => {
-      val colToStats = new HashMap[String, ColumnStatistics]
-      schemas(tableName).foreach(schema => {
-        val colName = schema.getName()
-        try {
-          colToStats(colName) = metaClient.getTableColumnStatistics(dbName, tableName, colName)
-        } catch {
-          case e: NoSuchObjectException =>
-            logInfo("No column stats available for "+tableName+"."+colName+" - NoSuchObjectException")
-            colToStats(colName) = null
-          case  _ =>
-            logInfo("No column stats available for "+tableName+"."+colName+" - other exception")
-            colToStats(colName) = null
-        }
-      })
-      tabToHiveColStats(tableName) = colToStats
-    })
-
-    // Get statistics for in-memory tables
+    // Fetch statistics for "Hive" (on-disk) and "Shark" (in-memory) tables
     tabToSharkCardStats = new HashMap[String, collection.Map[Int, Long]]
-    val tableNameToTable = new HashMap[String, Table]
-    tables.foreach(tableName =>
-      tableNameToTable(tableName) = metaClient.getTable(dbName, tableName)
-    )
-
-    tableNameToTable.foreach{ case(tableName, table) =>
+    tabToHiveColStats = new HashMap[String, HashMap[String, ColumnStatistics]]
+    
+    tableNameToTable.foreach { case(tableName, table) =>
       val cacheMode = CacheType.fromString(table.getParameters().get("shark.cache"))
 
       if (cacheMode == CacheType.HEAP) {
         // This is an in-memory table
-        println("Heap cache type for table "+tableName)
+        logInfo("Fetching stats for in-memory (heap cache type) table "+tableName)
 
         // Get table-level cardinality
         val colToCardinality = SharkEnv.memoryMetadataManager.getCardinality(tableName).getOrElse(null)
         tabToSharkCardStats(tableName) = colToCardinality
         val stats = SharkEnv.memoryMetadataManager.getStats(tableName).getOrElse(null)
         tabToSharkNumRows(tableName) = stats.values.toSeq.map(_.numRows).max
+      } else {
 
-        // Get table stats
-        val tableStats = SharkEnv.memoryMetadataManager.getStats(tableName).getOrElse(null)
+        // This is an on-disk table
+        logInfo("Fetching stats for on-disk table "+tableName)
+        val colToStats = new HashMap[String, ColumnStatistics]
+        schemas(tableName).foreach(schema => {
+          val colName = schema.getName()
+          try {
+            colToStats(colName) = metaClient.getTableColumnStatistics(dbName, tableName, colName)
+          } catch {
+            case e: NoSuchObjectException =>
+              logInfo("Hive column stats NOT available for "+tableName+"."+colName)
+              colToStats(colName) = null
+          }
+        })
+        tabToHiveColStats(tableName) = colToStats
       }
     }
   }
