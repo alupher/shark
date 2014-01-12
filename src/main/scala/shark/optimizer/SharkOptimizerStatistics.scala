@@ -17,16 +17,17 @@
 
 package shark.optimizer
 
+import java.util.{List => JList, ArrayList => JArrayList}
 import scala.collection.JavaConversions._
 import scala.collection.mutable.HashMap
-import java.util.{HashMap => JHashMap, List => JList, ArrayList => JArrayList}
 
-import org.apache.hadoop.hive.metastore.api._
 import org.apache.hadoop.hive.conf.HiveConf
-import org.apache.hadoop.hive.ql.parse._
+import org.apache.hadoop.hive.metastore.api._
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient
-import shark.memstore2.CacheType
+import org.apache.hadoop.hive.ql.parse._
+
 import shark.{SharkEnv, LogHelper}
+import shark.memstore2.CacheType
 
 class SharkOptimizerStatistics() extends LogHelper {
 
@@ -54,17 +55,15 @@ class SharkOptimizerStatistics() extends LogHelper {
 
     // Get schema (with column info) for each table
     schemas = new HashMap[String, JList[FieldSchema]]
-    tableNames.foreach(tableName => {
-      schemas(tableName) = metaClient.getSchema(dbName, tableName)
-    })
+    tableNames.foreach(tableName =>
+      schemas(tableName) = metaClient.getSchema(dbName, tableName))
 
-    // Get table objects
+    // Get table objects for all aliases.
     val tableNameToTable = new HashMap[String, Table]
     tableNames.foreach(tableName =>
-      tableNameToTable(tableName) = metaClient.getTable(dbName, tableName)
-    )
+      tableNameToTable(tableName) = metaClient.getTable(dbName, tableName))
     
-    // Get table sizes from Hive metadata for tables which have stats calculated
+    // Get table sizes from Hive metadata for tables which have stats calculated.
     tableNames.foreach(tableName => {
       val table = metaClient.getTable(dbName, tableName)
       val tParams = table.getParameters()
@@ -84,19 +83,14 @@ class SharkOptimizerStatistics() extends LogHelper {
     
     tableNameToTable.foreach { case(tableName, table) =>
       val cacheMode = CacheType.fromString(table.getParameters().get("shark.cache"))
-
       if (cacheMode == CacheType.HEAP) {
-        // This is an in-memory table
         logInfo("Fetching stats for in-memory (heap cache type) table "+tableName)
-
-        // Get table-level cardinality
-        val colToCardinality = SharkEnv.memoryMetadataManager.getCardinality(tableName).getOrElse(null)
+        val colToCardinality = SharkEnv.memoryMetadataManager
+          .getCardinality(tableName).getOrElse(null)
         tabToSharkCardStats(tableName) = colToCardinality
         val stats = SharkEnv.memoryMetadataManager.getStats(tableName).getOrElse(null)
         tabToSharkNumRows(tableName) = stats.values.toSeq.map(_.numRows).max
       } else {
-
-        // This is an on-disk table
         logInfo("Fetching stats for on-disk table "+tableName)
         val colToStats = new HashMap[String, ColumnStatistics]
         schemas(tableName).foreach(schema => {

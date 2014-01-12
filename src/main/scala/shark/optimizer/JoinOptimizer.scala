@@ -17,18 +17,21 @@
 
 package shark.optimizer
 
-import org.apache.hadoop.hive.ql.exec.{Operator => HiveOp}
-import org.apache.hadoop.hive.ql.parse._
+import java.util.{ArrayList => JavaArrayList, HashMap => JavaHashMap,
+  HashSet => JavaHashSet, LinkedHashMap => JavaLinkedHashMap }
 
-import shark.{SharkConfVars, LogHelper}
-
+import scala.Tuple2
 import scala.collection.JavaConversions._
 import scala.collection.mutable.{ArrayBuffer, HashMap}
-import java.util.{ArrayList => JavaArrayList, HashMap => JavaHashMap,
-                  HashSet => JavaHashSet, LinkedHashMap => JavaLinkedHashMap }
-import org.apache.hadoop.hive.ql.plan.{OperatorDesc, ExprNodeColumnDesc, ExprNodeDesc}
-import shark.parse.SharkSemanticAnalyzer
+
 import org.apache.hadoop.hive.conf.HiveConf
+import org.apache.hadoop.hive.ql.exec.{Operator => HiveOp, FilterOperator}
+import org.apache.hadoop.hive.ql.parse._
+import org.apache.hadoop.hive.ql.plan._
+import org.apache.hadoop.hive.ql.udf.generic._
+
+import shark.{SharkConfVars, LogHelper}
+import shark.parse.SharkSemanticAnalyzer
 
 class JoinOptimizer extends LogHelper {
   var qb: QB = _
@@ -91,6 +94,68 @@ class JoinOptimizer extends LogHelper {
     logInfo("Join optimization complete")
   }
 
+  /** Filter predicate comparison type */
+  object PredComparisonType extends Enumeration {
+    type PredComparisonType = Value
+    val EQ, LT, GT, LTE, GTE = Value
+  }
+
+  /** Filter op predicate information for the source of a join relation */
+  class JoinFilterPredInfo(
+    val predCompType: PredComparisonType.PredComparisonType,
+    val colName: String,
+    val expr: ExprNodeDesc) {}
+
+  /**
+   * Get predicate pushdown columns for a given table alias
+   */
+  def getFilters (tabAlias: String): Seq[JoinFilterPredInfo] = {
+    val filters = new ArrayBuffer[JoinFilterPredInfo]()
+    var op = aliasToOpInfo(tabAlias)
+    while (op.isInstanceOf[FilterOperator]) {
+      val pred = op.getConf.asInstanceOf[FilterDesc].getPredicate
+      val comparisonType = pred.asInstanceOf[ExprNodeGenericFuncDesc].getGenericUDF match {
+        case _:GenericUDFOPEqual => PredComparisonType.EQ
+        case _:GenericUDFOPEqualOrGreaterThan => PredComparisonType.GTE
+        case _:GenericUDFOPEqualOrLessThan => PredComparisonType.LTE
+        case _:GenericUDFOPGreaterThan => PredComparisonType.GT
+        case _:GenericUDFOPLessThan => PredComparisonType.LT
+      }
+      val filter = new JoinFilterPredInfo(comparisonType, pred.getCols()(0),
+        pred.asInstanceOf[ExprNodeGenericFuncDesc].getChildExprs()(1))
+      filters += filter
+      // In case we have multiple chained filter operators, traverse up the tree
+      op = op.getParentOperators()(0)
+    }
+    filters
+  }
+
+  /**
+   * Compute the selectivity of a particular predicate, as per System R.
+   * Only consider constants for now.
+   *  col = value: 1/card(col)
+   *  col > value, col >= value: 1/((max(col) - value) / (max(col) - min(col)))
+   *  col < value, col <= value: 1/((value - min(col)) / (max(col) - min(col)))
+   *
+   *  TODO: support BETWEEN, IN, OR
+   */
+  def computeFilterSelectivity (joinFilter: JoinFilterPredInfo, tabAlias: String): Double = {
+    if (joinFilter.predCompType == PredComparisonType.EQ) {
+      val filterColCard: Long = optimizerStats.getColumnCardinality(
+        qb.getTabNameForAlias(tabAlias), joinFilter.colName).getOrElse(1)
+      logInfo("Found EQ filter for "+tabAlias+"."+joinFilter.colName+", SF *= 1/"+filterColCard)
+      1.0 / filterColCard
+    } else if (joinFilter.predCompType == PredComparisonType.GT ||
+      joinFilter.predCompType == PredComparisonType.GTE ||
+      joinFilter.predCompType == PredComparisonType.LT ||
+      joinFilter.predCompType == PredComparisonType.LTE) {
+      // TODO: Use expressions in top comment (as in System R)
+      // For now, naively assume that >,>=,<=,< will reduce output by half
+      0.5
+    }  else {
+      1
+    }
+  }
 
   /**
    * Compute the join cost.
@@ -101,8 +166,6 @@ class JoinOptimizer extends LogHelper {
    *
    * TODO:
    *  - Cases with more than one join predicate between the relations
-   *  - Consider selectivites of filters that have been pushed down
-   *  - Consider equivalence classes
    */
   def computeJoinCost (leftPlan: Array[String], rightAlias: String): Long = {
 
@@ -114,21 +177,29 @@ class JoinOptimizer extends LogHelper {
       logInfo("Using traditional cost function")
     }
 
-    // Only use one predicate for now
+    // Get the join column names for right and left relations
     val rightRelJoinCol = aliasPairToExpressions(rightAlias, leftAlias)
       .map(exprToExprNodeDesc(_, rightAlias).getColumn).head
     val leftRelJoinCol = aliasPairToExpressions(leftAlias, rightAlias)
       .map(exprToExprNodeDesc(_, leftAlias).getColumn).head
 
-    // Todo: What should the deafult be if we don't have col card? 1 for now
+    // Get the cardinality for the join column on each side
+    // TODO: Pick default cardinality if we don't have it computed. Leaving 1 for now.
     val rightColCard: Long = optimizerStats.getColumnCardinality(
       qb.getTabNameForAlias(rightAlias), rightRelJoinCol).getOrElse(1)
     val leftColCard: Long  = optimizerStats.getColumnCardinality(
       qb.getTabNameForAlias(leftAlias), leftRelJoinCol).getOrElse(1)
 
     // Selectivity factor is 1 / max(leftColCard, rightColCard)
-    val selectivityFactor = 1.0 / (
+    var selectivityFactor = 1.0 / (
       if (rightColCard > leftColCard) rightColCard else leftColCard).toDouble
+
+    // Get the predicates that have been pushed down and include coefficients in the SF.
+    val leftFilters = getFilters(leftAlias)
+    val rightFilters = getFilters(rightAlias)
+    selectivityFactor *=
+      leftFilters.foldLeft(1.0)(_ * computeFilterSelectivity(_, leftAlias)) *
+      rightFilters.foldLeft(1.0)(_ * computeFilterSelectivity(_, leftAlias))
 
     logInfo("Calculating cost of joining ["+leftPlan.mkString(", ")+"] with ["+rightAlias+"]")
     logInfo("Join column cardinalities. Left: "+leftColCard+", Right: "+rightColCard)
@@ -137,7 +208,7 @@ class JoinOptimizer extends LogHelper {
     // Left relation cardinality = Cached cost of left plan = num rows of left relation
     val leftCard: Long =
     if (leftPlan.length == 1) {
-      // Todo: What should the deafult be if we don't have number of rows? 999999999 for now
+      // Todo: What should the defult be if we don't have number of rows? 999999999 for now
       optimizerStats.getNumRows(qb.getTabNameForAlias(leftAlias)).getOrElse(999999999)
     } else {
       bestJoinCardinality(leftPlan.toSet)
